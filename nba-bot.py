@@ -123,6 +123,7 @@ def fetch_cavs_schedule():
     with get_openai_callback() as cb:
         try:
             result = react_agent.run(prompt)
+            logging.info("result complet :\n%s", result)
             print(f"\nFinal Result: {result}")
             print(f"\nTotal Tokens: {cb.total_tokens}")
             print(f"Prompt Tokens: {cb.prompt_tokens}")
