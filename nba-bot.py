@@ -151,6 +151,11 @@ async def send_discord_message():
 
     await client.start(DISCORD_TOKEN)
 
+if not os.path.exists(DB_FILE):
+    print("📀 Aucune base trouvée, création de games.db...")
+    init_db()
+else:
+    print("✅ Base SQLite déjà existante, on continue.")
 # ------------------------
 # Main
 # ------------------------

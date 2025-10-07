@@ -26,6 +26,7 @@ jobs:
         with:
           name: games-db
           path: .
+        continue-on-error: true  # évite l'erreur au premier run
 
       - name: Run script
         env:
