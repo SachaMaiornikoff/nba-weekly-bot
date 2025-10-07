@@ -21,7 +21,8 @@ from langchain.callbacks import get_openai_callback
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
 DISCORD_CHANNEL_ID = int(os.environ["DISCORD_CHANNEL_ID"])
-SERPER_TOKEN = os.environ["SERPER_TOKEN"]
+SERPER_TOKEN = os.environ["DISCORD_TOKEN"]
+_TOKEN"]
 DB_FILE = "games.db"
 
 client_openai = OpenAI(api_key=OPENAI_API_KEY)
