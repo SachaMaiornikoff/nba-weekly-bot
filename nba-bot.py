@@ -93,7 +93,7 @@ def fetch_cavs_schedule():
     response = client_openai.chat.completions.create(
         model="gpt-5",
         messages=[{"role": "user", "content": prompt}],
-        temperature=1
+        temperature=0.1
     )
 
     logging.info("Réponse complète de l'API:\n%s", json.dumps(response.to_dict(), indent=2, ensure_ascii=False))
