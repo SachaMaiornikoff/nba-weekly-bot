@@ -88,7 +88,7 @@ def fetch_cavs_schedule():
     response = client_openai.chat.completions.create(
         model="gpt-5",
         messages=[{"role": "user", "content": prompt}],
-        temperature=0
+        temperature=1
     )
 
     json_output = response.choices[0].message.content
