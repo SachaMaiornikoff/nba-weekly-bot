@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import datetime, timedelta
 import pytz
+import logging
 import json
 import os
 import discord
@@ -15,6 +16,10 @@ DISCORD_CHANNEL_ID = int(os.environ["DISCORD_CHANNEL_ID"])
 DB_FILE = "games.db"
 
 client_openai = OpenAI(api_key=OPENAI_API_KEY)
+
+# logger
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
 
 # ------------------------
 # Fonction de conversion ET -> Paris
@@ -90,6 +95,8 @@ def fetch_cavs_schedule():
         messages=[{"role": "user", "content": prompt}],
         temperature=1
     )
+
+    logging.info("Réponse complète de l'API:\n%s", json.dumps(response.to_dict(), indent=2, ensure_ascii=False))
 
     json_output = response.choices[0].message.content
     try:
