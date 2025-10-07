@@ -91,7 +91,7 @@ def fetch_cavs_schedule():
     ]
     """
 
-    logging.info("prompt complet :\n%s", prompt, indent=2, ensure_ascii=False))
+    logging.info("prompt complet :\n%s", prompt)
 
 
     response = client_openai.chat.completions.create(
