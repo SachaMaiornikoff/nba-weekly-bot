@@ -6,6 +6,14 @@ import json
 import os
 import discord
 from openai import OpenAI
+# ------------------------
+# SERPER SEARCH
+# ------------------------
+from langchain_community.utilities import GoogleSerperAPIWrapper
+from langchain_openai import OpenAI
+from langchain.agents import initialize_agent, Tool
+from langchain.agents import AgentType
+from langchain.callbacks import get_openai_callback
 
 # ------------------------
 # CONFIG
@@ -13,9 +21,28 @@ from openai import OpenAI
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
 DISCORD_CHANNEL_ID = int(os.environ["DISCORD_CHANNEL_ID"])
+SERPER_TOKEN = os.environ["SERPER_TOKEN"]
 DB_FILE = "games.db"
 
 client_openai = OpenAI(api_key=OPENAI_API_KEY)
+
+# Initialize the Serper API Wrapper
+search = GoogleSerperAPIWrapper()
+
+tools = [
+    Tool(
+        name="Search",
+        func=search.run,
+        description="Useful for when you need to answer questions with up-to-date information."
+    )
+]
+
+react_agent = initialize_agent(
+    tools,
+    client_openai,
+    agent=AgentType.SELF_ASK_WITH_SEARCH,
+    verbose=True
+)
 
 # logger
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -92,6 +119,17 @@ def fetch_cavs_schedule():
     """
 
     logging.info("prompt complet :\n%s", prompt)
+
+    with get_openai_callback() as cb:
+        try:
+            result = react_agent.run(prompt)
+            print(f"\nFinal Result: {result}")
+            print(f"\nTotal Tokens: {cb.total_tokens}")
+            print(f"Prompt Tokens: {cb.prompt_tokens}")
+            print(f"Completion Tokens: {cb.completion_tokens}")
+            print(f"Total Cost (USD): ${cb.total_cost}")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
 
     response = client_openai.chat.completions.create(
