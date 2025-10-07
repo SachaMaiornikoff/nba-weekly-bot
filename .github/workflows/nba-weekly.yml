@@ -33,6 +33,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           DISCORD_CHANNEL_ID: ${{ secrets.DISCORD_CHANNEL_ID }}
+          SERPER_TOKEN: ${{ secrets.SERPER_TOKEN }}
         run: python nba-bot.py
 
       - name: Upload updated DB
