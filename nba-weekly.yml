@@ -1,0 +1,41 @@
+name: Cavs Weekly Bot
+
+on:
+  schedule:
+    - cron: '0 18 * * 0'  # tous les dimanches à 18h UTC
+  workflow_dispatch:      # pour le lancer manuellement
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Download previous DB (if exists)
+        uses: actions/download-artifact@v4
+        with:
+          name: games-db
+          path: .
+
+      - name: Run script
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          DISCORD_CHANNEL_ID: ${{ secrets.DISCORD_CHANNEL_ID }}
+        run: python cavs_bot.py
+
+      - name: Upload updated DB
+        uses: actions/upload-artifact@v4
+        with:
+          name: games-db
+          path: games.db
