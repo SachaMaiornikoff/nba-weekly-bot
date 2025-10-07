@@ -66,6 +66,7 @@ def fetch_cavs_schedule():
 
     prompt = f"""
     Donne-moi le programme NBA des Cleveland Cavaliers pour la semaine du {next_sunday} au {end_of_week}.
+    N'invente aucun match, et utilise uniquement les données du monde réel.
     Pour chaque match, indique :
     - date (YYYY-MM-DD)
     - équipe adverse
@@ -75,7 +76,7 @@ def fetch_cavs_schedule():
     - heure brute en US/Eastern (HH:MM)
     - watch: "full" ou "condensed"
     - un petit résumé rapide des enjeux du match
-    Réponds uniquement en JSON dans le format suivant :
+    Réponds uniquement en JSON dans le format suivant, sans aucun autre caractère, pour que je puisse parser directement ta réponse :
     [
       {{
         "date": "YYYY-MM-DD",
@@ -89,6 +90,9 @@ def fetch_cavs_schedule():
       }}
     ]
     """
+
+    logging.info("prompt complet :\n%s", prompt, indent=2, ensure_ascii=False))
+
 
     response = client_openai.chat.completions.create(
         model="gpt-5-chat-latest",
